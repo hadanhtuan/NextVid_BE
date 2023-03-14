@@ -16,6 +16,9 @@ import { ConflictException } from '@nestjs/common/exceptions';
 import { ProviderType } from 'src/common/enum';
 const crypto = require('crypto');
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 @Injectable()
 export class AuthService {
   constructor(

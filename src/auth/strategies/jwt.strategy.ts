@@ -4,6 +4,8 @@ import { JwtPayload } from '../jwt-payload-interface';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 
 @Injectable()
