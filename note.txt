@@ -1,0 +1,98 @@
+Decorator có thể coi như một cú pháp khai báo đặc biệt, không bao giờ đứng độc lập mà luôn được gắn kèm 
+với một khai báo class, method, property hoặc accessor. Decorator được viết dưới cú pháp dạng @expression, 
+với expression trỏ tới một function sẽ được gọi tới ở runtime, có nhiệm vụ thay đổi hoặc bổ sung cho đối tượng được decorate.
+
+Có rất nhiều class cơ bản của Nest có thể coi là 1 provider như: services, repositories. factories, helpers.
+Idea của provider là có thể inject dependencies - điều này có nghĩa là các object có thể tạo ra các quan hệ 
+với nhau, và việc tạo các instance của các object được Nest thực hiện tự động. Một provider đơn giản là 1 class được liên kết với 1 decorator @Injectable().
+
+@Injectable() decorator sẽ giúp Nest biết rằng đây là 1 provider
+
+DTOs are short Data Transfer Objects. They can be interfaces objects that determine how data will be sent in a post request body and response,
+
+TypeOrm is an Object Relational Mapper (ORM) typescript package that allows you to use both SQL such as PostgreSQL, MySQL and NoSQL databases.
+
+
+
+đm nhớ import rồi config dotenv
+
+Note that the validate() function in your JWT strategy is only called after successful validation of the JWT. 
+If you are consistently getting a 401 response when trying to use the JWT then you can't expect this function to be called.
+
+ @OneToOne(() => User, (user: User) => user.address)
+  public user: User;
+
+The crucial thing is that the inverse relationship is a bit of an abstract concept, and it does not create any additional columns in the database.
+Phía biên one thì sẽ không tạo cột
+
+eager : tự động join khóa ngoại khi được truy vấn
+cascade: post lên thì lưu cả bảng cha lẫn bảng ngoại
+
+
+@jointable cho mối quan hệ n-n, tạo ra bảng mới 
+
+npm build để render ra dist trước
+
+passport-local(authen bằng pass), passport-jwt(authen bằng token): Hai thư viện phục vụ hai phương pháp xác thực mà chúng ta đề cập ở trên. Trong passport, mỗi phương thức xác thực sẽ được gọi là một strategy.
+
+đối với mỗi tính năng xác thực, passport xây dựng cho chúng ta một strategy riêng, điều này giúp dễ dàng quản lý và mở rộng ứng dụng, giả sử ứng dụng cần xây dựng thêm các phương pháp xác thực khác, ta chỉ cần mở rộng bằng cách viết thêm strategy.
+
+ NestJS cung cấp khái niệm Guards - dịch ra nghĩa là bảo vệ - với vai trò cho phép chúng ta xây dựng logic nhằm quyết định xem khi nào thì một request được thực thi - nếu bạn đã từng làm việc với expressjs thì khái niệm này gần giống với middleware. Thư viện @nestjs/passport mà chúng ta cài đặt ban đầu đã tích hợp sẵn, cho phép chúng ta sử dụng strategy của passport như một Guard của API. Việc cần làm là thêm một xíu code vào bên trong auth.controller.ts
+
+
+    .where('followerId = :id1 AND followingId = :id2', {id1: user.id, id2: id})
+    = :id chứ đéo phải := id
+    
+When using the QueryBuilder, you need to provide unique parameters in your WHERE expressions. This will not work:
+
+
+https://typeorm.biunav.com/en/select-query-builder.html#getting-values-using-querybuilder
+
+
+getMany, getOne thì sẽ exec ngay luôn, getRaw, getManyRaw cũng vậy nhưng mà 2 cái này dùng để tính sum hay min max cc j đó
+còn execute là để exec query sau này ở các câu lệnh bên dưới
+
+
+các kiểu truy vấn:
+kiểu 1: 
+    const blog: Blog[] = await this.dataSource.getRepository(Blog).createQueryBuilder('Blog').select("blog").from(Blog, 'blog').getMany()
+kiểu 2: 
+    const { sum } = await dataSource
+        .getRepository(User)
+        .createQueryBuilder("user")
+        .select("SUM(user.photosCount)", "sum")
+        .where("user.id = :id", { id: 1 })
+        .getRawOne()
+
+kiểu 3: 
+    const blog = await this.repository.createQueryBuilder().find({})
+    const blog = await this.repository.createQueryBuilder().select.form........
+
+kiểu 4:
+    truy vấn thẳng trong file repository
+
+
+
+
+
+"resolveJsonModule": true  vô tsconfig để dùng JSON
+
+Query:
+
+return await this.separatorRepository
+  .createQueryBuilder('separator')
+  .innerJoinAndSelect('separator.facility', 'facility')
+  .innerJoinAndSelect('facility.customer', 'customer')
+  .select()
+  .form
+  .where('separator.id = :separatorId', { separatorId })
+  .getOne();
+
+    const blogs = await this.createQueryBuilder('blog').leftJoinAndSelect("blog.user", "user").take(5).skip((page-1)*5).getMany()
+
+
+
+The ORDER BY clause can only be applied after the DISTINCT has been applied. Since only the fields in the SELECT statement are taken into consideration for the DISTINCT operations, those are the only fields may be used in the ORDER BY.
+
+
+hàm nào xài chung thì để trên repository ví dụ như tạo blog, module nào cần tạo blog thì gọi lại trên reopository
