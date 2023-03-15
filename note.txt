@@ -96,3 +96,4 @@ The ORDER BY clause can only be applied after the DISTINCT has been applied. Sin
 
 
 hàm nào xài chung thì để trên repository ví dụ như tạo blog, module nào cần tạo blog thì gọi lại trên reopository
+nên import dynamic

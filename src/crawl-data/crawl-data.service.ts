@@ -28,18 +28,18 @@ export class CrawlDataService {
   async crawlDataByUsername(username: string): Promise<void> {
     const options = {
       method: 'GET',
-      url: 'https://tiktok-api6.p.rapidapi.com/user/videos',  
-      params: {username},
+      url: 'https://tiktok-api6.p.rapidapi.com/user/videos',
+      params: { username },
       headers: {
-        'X-RapidAPI-Key': '09eb2540b4msha179fbc58b564bap13ebc9jsn018bbe200a17', 
-        'X-RapidAPI-Host': 'tiktok-api6.p.rapidapi.com'
-      }
+        'X-RapidAPI-Key': '09eb2540b4msha179fbc58b564bap13ebc9jsn018bbe200a17',
+        'X-RapidAPI-Host': 'tiktok-api6.p.rapidapi.com',
+      },
     };
 
     v2.config({
       cloud_name: 'dhshtvtrl',
       api_key: '779359292484378',
-      api_secret: 'o0_WRq0vULdf3lMZvGOBuzA5KLE', 
+      api_secret: 'o0_WRq0vULdf3lMZvGOBuzA5KLE',
     });
 
     const response = await axios.request(options);
@@ -58,59 +58,62 @@ export class CrawlDataService {
       newData.avatar = resData.videos[0].avatar_thumb;
       newData.fullname = resData.videos[0].author_name;
 
-      for (const video of resData.videos) { 
-        let url_cloudinary = '';
-        const result2 = await v2.uploader.upload(video.download_url, {
-          resource_type: 'video',
-        });
-        console.log(result2);
-        url_cloudinary = result2.url;
-        if (newData.videos?.length > 0) {
-          newData.videos.push({ 
-            description: video.description,
-            url: video.download_url,
-            url_cloudinary,
-            isSave: false,
-          }); 
-        } else {
-          newData.videos = [ 
-            {
+      for (const video of resData.videos) {
+        try {
+          let url_cloudinary = '';
+          const result2 = await v2.uploader.upload(video.download_url, {
+            resource_type: 'video',
+          });
+          console.log(result2);
+          url_cloudinary = result2.url;
+          if (newData.videos?.length > 0) {
+            newData.videos.push({
               description: video.description,
-              url: video.download_url,  
-              url_cloudinary, 
-              isSave: false,  
-            },
-          ];
-        } 
-        
+              url: video.download_url,
+              url_cloudinary,
+              isSave: false,
+            });
+          } else {
+            newData.videos = [ 
+              {
+                description: video.description,
+                url: video.download_url,
+                url_cloudinary,
+                isSave: false,
+              },
+            ];
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
     if (data?.length > 0) data.push({ ...newData });
     else data = [newData];
     fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(data));
   }
- 
+
   async saveToCloudinary() {}
 
   async saveDataToDatabase(): Promise<void> {
-    for (let i = 0; i < data.length; i++) { 
+    for (let i = 0; i < data.length; i++) {
       const user = new User();
       user.username = data[i].username;
       user.avatar = data[i].avatar_cloudinary;
       user.full_name = data[i].fullname;
       user.email = data[i].username + '@tiktok.gmail.com';
-      user.salt = await bcrypt.genSalt(); 
+      user.salt = await bcrypt.genSalt();
       user.password = await bcrypt.hash(user.username, user.salt); //password == username
 
       await user.save();
 
-      await Promise.all(  
+      await Promise.all(
         data[i].videos.map(async (video) => {
           const blog = new Blog();
           blog.access_modifier = AccessMod.PUBLIC;
           blog.allow_comment = true;
           blog.caption = video.description;
-          blog.video_url = video.url_cloudinary; 
+          blog.video_url = video.url_cloudinary;
           blog.user = user;
 
           await blog.save();

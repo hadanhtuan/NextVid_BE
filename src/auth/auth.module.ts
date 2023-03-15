@@ -16,12 +16,12 @@ dotenv.config();
 
   
 @Module({
-  imports: [
-    PassportModule,
+  imports: [ 
+    PassportModule, 
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: {
-        expiresIn:  7200
+        expiresIn: 7200
       }
     }),
     TypeOrmModule.forFeature([User]) 

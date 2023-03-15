@@ -40,8 +40,8 @@ let CrawlDataService = class CrawlDataService {
             params: { username },
             headers: {
                 'X-RapidAPI-Key': '09eb2540b4msha179fbc58b564bap13ebc9jsn018bbe200a17',
-                'X-RapidAPI-Host': 'tiktok-api6.p.rapidapi.com'
-            }
+                'X-RapidAPI-Host': 'tiktok-api6.p.rapidapi.com',
+            },
         };
         cloudinary_1.v2.config({
             cloud_name: 'dhshtvtrl',
@@ -61,29 +61,34 @@ let CrawlDataService = class CrawlDataService {
             newData.avatar = resData.videos[0].avatar_thumb;
             newData.fullname = resData.videos[0].author_name;
             for (const video of resData.videos) {
-                let url_cloudinary = '';
-                const result2 = await cloudinary_1.v2.uploader.upload(video.download_url, {
-                    resource_type: 'video',
-                });
-                console.log(result2);
-                url_cloudinary = result2.url;
-                if (((_a = newData.videos) === null || _a === void 0 ? void 0 : _a.length) > 0) {
-                    newData.videos.push({
-                        description: video.description,
-                        url: video.download_url,
-                        url_cloudinary,
-                        isSave: false,
+                try {
+                    let url_cloudinary = '';
+                    const result2 = await cloudinary_1.v2.uploader.upload(video.download_url, {
+                        resource_type: 'video',
                     });
-                }
-                else {
-                    newData.videos = [
-                        {
+                    console.log(result2);
+                    url_cloudinary = result2.url;
+                    if (((_a = newData.videos) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                        newData.videos.push({
                             description: video.description,
                             url: video.download_url,
                             url_cloudinary,
                             isSave: false,
-                        },
-                    ];
+                        });
+                    }
+                    else {
+                        newData.videos = [
+                            {
+                                description: video.description,
+                                url: video.download_url,
+                                url_cloudinary,
+                                isSave: false,
+                            },
+                        ];
+                    }
+                }
+                catch (err) {
+                    console.log(err);
                 }
             }
         }

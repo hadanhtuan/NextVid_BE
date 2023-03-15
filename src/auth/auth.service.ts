@@ -13,7 +13,7 @@ import { CreateAccountDto } from './dto/create-account.dto';
 import * as bcrypt from 'bcrypt'
 import * as firebase from 'firebase-admin';
 import { ConflictException } from '@nestjs/common/exceptions';
-import { ProviderType } from 'src/common/enum';
+import { ProviderType } from '../common/enum';
 const crypto = require('crypto');
 
 import * as dotenv from 'dotenv';
