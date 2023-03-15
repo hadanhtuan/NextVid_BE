@@ -23,6 +23,8 @@ const firebase = require("firebase-admin");
 const exceptions_1 = require("@nestjs/common/exceptions");
 const enum_1 = require("../common/enum");
 const crypto = require('crypto');
+const dotenv = require("dotenv");
+dotenv.config();
 let AuthService = class AuthService {
     constructor(userRepository, jwtService) {
         this.userRepository = userRepository;
