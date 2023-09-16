@@ -21,6 +21,9 @@ export class AuthController {
     return this.authService.signIn(authCredentialsDto)
   }
 
+  //TODO: In case use passport-facebook: front end send accessToken and backend have 2 route: 'facebook' and 'facebook/callback'
+  // request first come to 'facebook' route and go through useguard('facebook') to get data from facebook and after that it will 
+  // redirect to 'facebook/callback' route, implement code in this func
   @Post('/facebook')
   async facebookAuth(@Body() body: {accessToken: string}): Promise<{accessToken: string, id: number, username: string, avatar: string, follows: any, blogs: any}>  {
     return await this.authService.facebookAuth(body.accessToken);
